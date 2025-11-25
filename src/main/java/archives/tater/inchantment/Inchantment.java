@@ -11,7 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
 public class Inchantment implements ModInitializer {
 	public static final String MOD_ID = "inchantment";
 
-    public static Identifier id(String namespace, String path) {
-        return Identifier.fromNamespaceAndPath(namespace, path);
+    public static ResourceLocation id(String namespace, String path) {
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
-    public static Identifier id(String path) {
+    public static ResourceLocation id(String path) {
         return id(MOD_ID, path);
     }
 
@@ -35,10 +35,10 @@ public class Inchantment implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    private static <T> DataComponentType<@NotNull T> registerComponent(String path, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, @NotNull T> streamCodec, boolean cache, boolean ignoreSwapAnimation) {
+    private static <T> DataComponentType<@NotNull T> registerComponent(String path, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, @NotNull T> streamCodec, boolean cache/*, boolean ignoreSwapAnimation*/) {
         var type = DataComponentType.<T>builder().persistent(codec).networkSynchronized(streamCodec);
         if (cache) type.cacheEncoding();
-        if (ignoreSwapAnimation) type.ignoreSwapAnimation();
+//        if (ignoreSwapAnimation) type.ignoreSwapAnimation();
         return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, id(path), type.build());
     }
 
@@ -46,8 +46,8 @@ public class Inchantment implements ModInitializer {
             "enchantment_progress",
             EnchantmentProgress.CODEC,
             EnchantmentProgress.STREAM_CODEC,
-            true,
-            true
+            true//,
+//            true
     );
 
     public static Component getName(Holder<@NotNull Enchantment> enchantment) {

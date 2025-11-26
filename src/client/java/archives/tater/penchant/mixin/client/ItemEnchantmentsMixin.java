@@ -56,8 +56,20 @@ public class ItemEnchantmentsMixin {
     private <T> void addProgress(Consumer<T> instance, T text, Operation<Void> original, @Share("enchantment") LocalRef<Holder<Enchantment>> enchantment, @Share("level") LocalIntRef level, @Share("progress") LocalRef<EnchantmentProgress> progress) {
         original.call(instance, text);
 
+        if (!PenchantClient.SHOW_PROGRESS_KEYBIND.isDownAnywhere()) return;
+
         if (!EnchantmentProgress.shouldShowTooltip(enchantment.get())) return;
 
         original.call(instance, PenchantClient.getProgressTooltip(progress.get(), enchantment.get(), level.get()));
+    }
+
+    @Inject(
+            method = "addToTooltip",
+            at = @At("TAIL")
+    )
+    private void addHint(TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag flag, DataComponentGetter componentGetter, CallbackInfo ci) {
+        if (PenchantClient.SHOW_PROGRESS_KEYBIND.isDownAnywhere()) return;
+
+        tooltipAdder.accept(PenchantClient.getProgressKeyHint());
     }
 }

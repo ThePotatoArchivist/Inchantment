@@ -1,4 +1,5 @@
 {
   "penchant.tooltip.progress": "%s/%s",
-  "penchant.tooltip.progress.max": "MAX"
+  "penchant.tooltip.progress.max": "MAX",
+  "penchant.tooltip.progress.key": "Press [%s] for progress"
 }

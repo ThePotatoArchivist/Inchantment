@@ -17,18 +17,23 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.Util.makeDescriptionId;
 
 public class PenchantClient implements ClientModInitializer {
-    private static KeyMapping keybind(ResourceLocation id, int key, KeyMapping.Category category) {
-        return KeyBindingHelper.registerKeyBinding(new KeyMapping(makeDescriptionId("key", id), Type.KEYSYM, key, category));
+    private static KeyMappingExt keybind(ResourceLocation id, int key, KeyMapping.Category category) {
+        return (KeyMappingExt) KeyBindingHelper.registerKeyBinding(new KeyMappingExt(makeDescriptionId("key", id), Type.KEYSYM, key, category));
     }
 
     private static final KeyMapping.Category PENCHANT_CATEGORY = KeyMapping.Category.register(Penchant.id(Penchant.MOD_ID));
-    public static final KeyMapping SHOW_PROGRESS_KEYBIND = keybind(
+    public static final KeyMappingExt SHOW_PROGRESS_KEYBIND = keybind(
             Penchant.id("show_progress"),
-            InputConstants.KEY_LSHIFT,
+            InputConstants.KEY_LCONTROL,
             PENCHANT_CATEGORY
     );
 
     public static final int BAR_WIDTH = 32;
+
+    public static Component getProgressKeyHint() {
+        return Component.translatable("penchant.tooltip.progress.key", Component.keybind(SHOW_PROGRESS_KEYBIND.getName()))
+                .withStyle(ChatFormatting.DARK_GRAY);
+    }
 
     public static Component getProgressTooltip(EnchantmentProgress progress, Holder<@NotNull Enchantment> enchantment, int level) {
         if (level >= enchantment.value().getMaxLevel())
@@ -46,7 +51,7 @@ public class PenchantClient implements ClientModInitializer {
                 ;
     }
 
-	@Override
+    @Override
 	public void onInitializeClient() {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 	}

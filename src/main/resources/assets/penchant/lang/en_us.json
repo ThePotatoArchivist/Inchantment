@@ -1,7 +1,7 @@
 {
   "penchant.tooltip.progress": "%s/%s",
   "penchant.tooltip.progress.max": "MAX",
-  "penchant.tooltip.progress.key": "[%s] to see progress",
+  "penchant.tooltip.progress.key": "See progress: [%s]",
   "dataPack.penchant.durability_rework.name": "Penchant: Durability Rework",
   "dataPack.penchant.durability_rework.description": "Remove mending & alter unbreaking"
 }

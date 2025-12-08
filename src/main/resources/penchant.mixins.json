@@ -11,6 +11,7 @@
     "disable.SingleEnchantmentMixin",
     "leveling.AnvilMenuMixin",
     "leveling.CreativeModeTabsMixin",
+    "leveling.EnchantCommandMixin",
     "leveling.ItemStackMixin"
   ],
   "injectors": {

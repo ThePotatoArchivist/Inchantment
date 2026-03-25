@@ -202,7 +202,7 @@ public class PenchantmentScreen extends AbstractContainerScreen<PenchantmentMenu
         var gamePartialTick = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         super.render(guiGraphics, mouseX, mouseY, gamePartialTick);
 
-        if (hoveredSlot != null && !hoveredSlot.hasItem())
+        if (hoveredSlot != null && !hoveredSlot.hasItem() && hoveredSlot.index <= 1)
             guiGraphics.setTooltipForNextFrame(font, font.split(
                     hoveredSlot.index == 0
                             ? ENCHANTING_SLOT_TOOLTIP

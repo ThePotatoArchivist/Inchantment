@@ -2,6 +2,14 @@
   "values": [
     "#minecraft:harnesses",
     "#c:armors/horse",
-    "#c:armors/nautilus"
+    "#c:armors/nautilus",
+    {
+      "id": "enderscape:mirror",
+      "required": false
+    },
+    {
+      "id": "enderscape:magnia_attractor",
+      "required": false
+    }
   ]
 }

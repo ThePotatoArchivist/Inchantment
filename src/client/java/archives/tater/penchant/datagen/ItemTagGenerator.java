@@ -25,7 +25,8 @@ public class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         builder(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS)
                 .forceAddTag(ItemTags.HARNESSES)
                 .forceAddTag(ConventionalItemTags.HORSE_ARMORS)
-                .forceAddTag(ConventionalItemTags.NAUTILUS_ARMORS)
+                .forceAddTag(ConventionalItemTags.NAUTILUS_ARMORS);
+        builder(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS)
                 .addOptional(createKey("enderscape", "mirror"))
                 .addOptional(createKey("enderscape", "magnia_attractor"));
     }

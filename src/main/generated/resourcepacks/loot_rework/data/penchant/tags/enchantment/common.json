@@ -9,6 +9,10 @@
     "minecraft:quick_charge",
     "minecraft:impaling",
     "minecraft:loyalty",
-    "minecraft:lure"
+    "minecraft:lure",
+    {
+      "id": "enderscape:resonance",
+      "required": false
+    }
   ]
 }

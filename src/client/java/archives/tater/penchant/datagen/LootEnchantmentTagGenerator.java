@@ -83,19 +83,24 @@ public class LootEnchantmentTagGenerator extends FabricTagsProvider<Enchantment>
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         builder(PenchantEnchantmentTags.UNIQUE)
-                .addAll(UNIQUE);
+                .addAll(UNIQUE)
+                .addOptional(createKey("enderscape", "rebound"))
+                .addOptional(createKey("enderscape", "transdimensional"));
 
         builder(PenchantEnchantmentTags.RARE)
                 .addAll(RARE)
                 .addOptional(createKey("veinminer-enchantment", "veinminer"))
-                .addOptional(createKey("veinminer_enchantment", "veinminer"));
+                .addOptional(createKey("veinminer_enchantment", "veinminer"))
+                .addOptional(createKey("enderscape", "stun_burst"));
 
         builder(PenchantEnchantmentTags.UNCOMMON)
                 .addAll(UNCOMMON)
-                .addOptional(createKey("farmersdelight", "backstabbing"));
+                .addOptional(createKey("farmersdelight", "backstabbing"))
+                .addOptional(createKey("enderscape", "bundling"));
 
         builder(PenchantEnchantmentTags.COMMON)
-                .addAll(COMMON);
+                .addAll(COMMON)
+                .addOptional(createKey("enderscape", "resonance"));
 
         builder(EnchantmentTags.TREASURE)
                 .addTag(PenchantEnchantmentTags.RARE)

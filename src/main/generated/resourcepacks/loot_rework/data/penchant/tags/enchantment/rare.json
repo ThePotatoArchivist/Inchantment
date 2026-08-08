@@ -20,6 +20,10 @@
     {
       "id": "veinminer_enchantment:veinminer",
       "required": false
+    },
+    {
+      "id": "enderscape:stun_burst",
+      "required": false
     }
   ]
 }

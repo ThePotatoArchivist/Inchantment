@@ -17,6 +17,10 @@
     {
       "id": "farmersdelight:backstabbing",
       "required": false
+    },
+    {
+      "id": "enderscape:bundling",
+      "required": false
     }
   ]
 }

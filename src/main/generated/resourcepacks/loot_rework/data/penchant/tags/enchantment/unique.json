@@ -4,6 +4,14 @@
     "minecraft:density",
     "minecraft:wind_burst",
     "minecraft:soul_speed",
-    "minecraft:swift_sneak"
+    "minecraft:swift_sneak",
+    {
+      "id": "enderscape:rebound",
+      "required": false
+    },
+    {
+      "id": "enderscape:transdimensional",
+      "required": false
+    }
   ]
 }

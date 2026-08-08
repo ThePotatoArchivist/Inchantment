@@ -1,4 +1,4 @@
-// 26.2	-999999999-01-01T00:00:00	penchant:loot_rework/Tags for minecraft:enchantment
+// 26.1.2	-999999999-01-01T00:00:00	penchant:loot_rework/Tags for minecraft:enchantment
 d4b5ab32484ae7eb95b2a3cc4d820d2b8ff20015 resourcepacks/loot_rework/data/minecraft/tags/enchantment/in_enchanting_table.json
 22057d1f44c2559d289f97fa629add05884a3da5 resourcepacks/loot_rework/data/minecraft/tags/enchantment/non_treasure.json
 29fb6b3da0795af8ccff8ed6cd21e7da7c5f1997 resourcepacks/loot_rework/data/minecraft/tags/enchantment/on_mob_spawn_equipment.json

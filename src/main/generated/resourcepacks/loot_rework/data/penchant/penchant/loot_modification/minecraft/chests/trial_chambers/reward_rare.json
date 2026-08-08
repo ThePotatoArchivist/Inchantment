@@ -1,6 +1,7 @@
 {
   "pools": [
     {
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:empty",
@@ -10,6 +11,7 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "add": false,
               "enchantments": {
                 "minecraft:density": 1.0
               },
@@ -22,6 +24,7 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "add": false,
               "enchantments": {
                 "minecraft:breach": 1.0
               },

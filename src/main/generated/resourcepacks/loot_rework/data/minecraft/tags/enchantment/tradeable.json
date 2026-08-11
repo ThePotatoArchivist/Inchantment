@@ -2,7 +2,8 @@
   "fabric:remove": [
     "#penchant:common",
     "#penchant:rare",
-    "#penchant:unique"
+    "#penchant:unique",
+    "#minecraft:curse"
   ],
   "values": [
     "#penchant:uncommon"

@@ -16,8 +16,13 @@ public class PenchantModules {
     public static final Identifier NO_ANVIL_BOOKS = Penchant.id("no_anvil_books");
     public static final Identifier LOOT_REWORK = Penchant.id("loot_rework");
     public static final Identifier GUARANTEED_DROPS = Penchant.id("guaranteed_drops");
-    public static final Identifier REDUCED_CURSES = Penchant.id("reduced_curses");
     public static final Identifier RANDOMIZED_LIBRARIANS = Penchant.id("randomized_librarians");
+
+    /**
+     * @deprecated Removed
+     */
+    @Deprecated
+    public static final Identifier REDUCED_CURSES = Penchant.id("reduced_curses");
 
     private static void registerPack(Identifier id) {
         registerPack(id, PackActivationType.DEFAULT_ENABLED);
@@ -39,7 +44,6 @@ public class PenchantModules {
         registerPack(NO_ANVIL_BOOKS);
         registerPack(LOOT_REWORK);
         registerPack(GUARANTEED_DROPS);
-        registerPack(REDUCED_CURSES, PackActivationType.NORMAL);
         registerPack(RANDOMIZED_LIBRARIANS, PackActivationType.NORMAL);
     }
 }

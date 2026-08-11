@@ -57,7 +57,7 @@ public class EnchantmentSlotWidget extends AbstractButton {
         isCurse = enchantment.is(EnchantmentTags.CURSE);
 
         var text = enchantment.value().description().copy();
-        if (!isUnlocked && canUse) text.withStyle(style -> style.withFont(ALT_FONT));
+        if (!isUnlocked && !alreadyAdded) text.withStyle(style -> style.withFont(ALT_FONT));
         this.text = text;
 
         var xpCost = PenchantmentHelper.getXpLevelCost(enchantment);

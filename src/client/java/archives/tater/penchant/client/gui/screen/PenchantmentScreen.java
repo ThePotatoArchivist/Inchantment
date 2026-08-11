@@ -124,7 +124,7 @@ public class PenchantmentScreen extends AbstractContainerScreen<PenchantmentMenu
                         creative || !menu.getIngredientStack().isEmpty(),
                         creative || PenchantmentHelper.getBookRequirement(enchantment) <= menu.getBookCount(),
                         creative || PenchantmentHelper.getXpLevelCost(enchantment) <=  menu.getPlayerXp(),
-                        menu.isAvailable(enchantment)
+                        creative || menu.isAvailable(enchantment)
                 ));
         }
     }

@@ -19,7 +19,7 @@ public class EnchantRandomlyFunctionMixin {
             method = "enchantItem",
             at = @At("RETURN")
     )
-    private static ItemStack addProgress(ItemStack original, @Local(argsOnly = true) LootContext context) {
+    private static ItemStack addProgress(ItemStack original, @Local(argsOnly = true, name = "context") LootContext context) {
         if (EnchantmentHelper.getComponentType(original) == DataComponents.STORED_ENCHANTMENTS) return original;
 
         EnchantmentProgress.addRandomProgress(original, context.getRandom());

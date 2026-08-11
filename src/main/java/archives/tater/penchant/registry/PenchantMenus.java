@@ -3,16 +3,23 @@ package archives.tater.penchant.registry;
 import archives.tater.penchant.Penchant;
 import archives.tater.penchant.menu.PenchantmentMenu;
 
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
+
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.inventory.MenuType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.item.enchantment.Enchantment;
+
+import java.util.List;
+import java.util.Set;
 
 public class PenchantMenus {
-    public static final MenuType<PenchantmentMenu> PENCHANTMENT_MENU = Registry.register(
+    public static final ExtendedMenuType<PenchantmentMenu, Set<Holder<Enchantment>>> PENCHANTMENT_MENU = Registry.register(
             BuiltInRegistries.MENU,
             Penchant.id("penchantment"),
-            new MenuType<>(PenchantmentMenu::new, FeatureFlags.VANILLA_SET) // TODO feature flags
+            new ExtendedMenuType<>(PenchantmentMenu::new, ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT).apply(ByteBufCodecs.list()).map(Set::copyOf, List::copyOf))
     );
 
     public static void init() {

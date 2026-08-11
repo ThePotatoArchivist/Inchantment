@@ -47,6 +47,7 @@ public class PenchantFlag {
     public static final PenchantFlag GUARANTEED_ENCHANTED_DROP = register("guaranteed_enchanted_drop");
     public static final PenchantFlag GUARANTEED_TRIDENT_DROP = register("guaranteed_trident_drop");
     public static final PenchantFlag ZOMBIE_SPAWN_PICKAXE = register("zombie_spawn_pickaxe");
+    public static final PenchantFlag REPLACE_BOOK_LOOT_TAG = register("replace_book_loot_tag");
 
     public static void init() {
 

@@ -1,5 +1,6 @@
 {
   "values": [
-    "penchant:zombie_spawn_pickaxe"
+    "penchant:zombie_spawn_pickaxe",
+    "penchant:replace_book_loot_tag"
   ]
 }

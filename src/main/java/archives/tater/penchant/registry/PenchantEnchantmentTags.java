@@ -16,6 +16,7 @@ public class PenchantEnchantmentTags {
     // behavior
     public static final TagKey<Enchantment> DISABLED = create("disabled");
     public static final TagKey<Enchantment> NO_LEVELING = create("no_leveling");
+    public static final TagKey<Enchantment> ON_RANDOM_LOOT_BOOKS = create("on_random_loot_books");
 
     // categories
     public static final TagKey<Enchantment> UNIQUE = create("unique");

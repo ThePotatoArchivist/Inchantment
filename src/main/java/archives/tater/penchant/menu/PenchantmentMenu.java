@@ -1,14 +1,11 @@
 package archives.tater.penchant.menu;
 
 import archives.tater.penchant.Penchant;
-import archives.tater.penchant.network.UnlockedEnchantmentsPayload;
 import archives.tater.penchant.registry.PenchantAdvancements;
 import archives.tater.penchant.registry.PenchantBlockTags;
 import archives.tater.penchant.registry.PenchantEnchantmentTags;
 import archives.tater.penchant.registry.PenchantMenus;
 import archives.tater.penchant.util.PenchantmentHelper;
-
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -42,7 +39,6 @@ import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,15 +63,23 @@ public class PenchantmentMenu extends AbstractContainerMenu {
 
     private Runnable onSlotsChange = () -> {};
 
-    public PenchantmentMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL);
+    public PenchantmentMenu(int containerId, Inventory playerInventory, Set<Holder<Enchantment>> unlockedEnchantments) {
+        this(containerId, playerInventory, unlockedEnchantments, ContainerLevelAccess.NULL);
     }
 
-    public PenchantmentMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+    public PenchantmentMenu(int containerId, Inventory playerInventory, Set<Holder<Enchantment>> unlockedEnchantments, ContainerLevelAccess access) {
         super(PenchantMenus.PENCHANTMENT_MENU, containerId);
         player = playerInventory.player;
         enchantments = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
         this.access = access;
+
+        availableEnchantments = Stream.concat(
+                unlockedEnchantments.stream(),
+                enchantments
+                        .get(EnchantmentTags.IN_ENCHANTING_TABLE).stream()
+                        .flatMap(HolderSet::stream)
+        ).collect(Collectors.toSet());
+
         addSlot(new Slot(enchantSlots, 0, 15, 58) {
             @Override
             public int getMaxStackSize() {
@@ -96,18 +100,13 @@ public class PenchantmentMenu extends AbstractContainerMenu {
         addStandardInventorySlots(playerInventory, 23, 90);
 
         access.execute((level, pos) -> {
-            bookCount.set(getBookCount(level, pos));
+            var bookCount = getBookCount(level, pos);
+            this.bookCount.set(bookCount);
             hasDisenchanter.set(player.hasInfiniteMaterials() || hasDisenchanter(level, pos) ? 1 : 0);
-        });
-    }
 
-    public void setUnlockedEnchantments(Set<Holder<Enchantment>> unlockedEnchantments) {
-        this.availableEnchantments = Stream.concat(
-                unlockedEnchantments.stream(),
-                enchantments
-                        .get(EnchantmentTags.IN_ENCHANTING_TABLE).stream()
-                        .flatMap(HolderSet::stream)
-        ).collect(Collectors.toSet());
+            if (player instanceof ServerPlayer serverPlayer)
+                PenchantAdvancements.OPEN_TABLE.trigger(serverPlayer, bookCount, unlockedEnchantments);
+        });
     }
 
     public boolean isAvailable(Holder<Enchantment> enchantment) {
@@ -188,19 +187,6 @@ public class PenchantmentMenu extends AbstractContainerMenu {
                 .anyMatch(offset -> level.getBlockState(pos.offset(offset)).is(PenchantBlockTags.DISENCHANTER));
     }
 
-    public void sendEnchantments() {
-        access.execute((level, pos) -> {
-            var unlockedEnchantments = getUnlockedEnchantments(level, pos);
-            var effectiveUnlockedEnchantments = player.hasInfiniteMaterials()
-                    ? enchantments.listElements().<Holder<Enchantment>>map(Function.identity()).collect(Collectors.toSet())
-                    : unlockedEnchantments;
-            setUnlockedEnchantments(effectiveUnlockedEnchantments);
-            ServerPlayNetworking.send((ServerPlayer) player, new UnlockedEnchantmentsPayload(effectiveUnlockedEnchantments));
-
-            PenchantAdvancements.OPEN_TABLE.trigger((ServerPlayer) player, getBookCount(), unlockedEnchantments);
-        });
-    }
-
     public void handleEnchant(Holder<Enchantment> enchantment) {
         var stack = getEnchantingStack();
         if (isEnchanting()) {
@@ -268,6 +254,7 @@ public class PenchantmentMenu extends AbstractContainerMenu {
             return;
         }
         if (isEnchanting()) {
+            var creative = player.hasInfiniteMaterials();
             displayedEnchantments = streamOrdered(enchantments, EnchantmentTags.TOOLTIP_ORDER)
                     .filter(enchantment ->
                             !enchantment.is(PenchantEnchantmentTags.DISABLED) &&
@@ -275,7 +262,7 @@ public class PenchantmentMenu extends AbstractContainerMenu {
                             (!enchantment.is(EnchantmentTags.CURSE) || availableEnchantments.contains(enchantment) || PenchantmentHelper.hasEnchantment(stack, enchantment))
                     )
                     .sorted(comparingInt(enchantment ->
-                            !availableEnchantments.contains(enchantment) && !PenchantmentHelper.hasEnchantment(stack, enchantment) ? 2
+                            creative || !availableEnchantments.contains(enchantment) && !PenchantmentHelper.hasEnchantment(stack, enchantment) ? 2
                             : enchantment.is(EnchantmentTags.CURSE) ? 1
                             : 0
                     ))

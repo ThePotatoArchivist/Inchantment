@@ -42,7 +42,7 @@ public class PenchantDataGenerator implements DataGeneratorEntrypoint {
         tablePack.addProvider(TableAdvancementGenerator::new);
 
         var lootPack = createPack(fabricDataGenerator, PenchantModules.LOOT_REWORK);
-        lootPack.addProvider(FlagTagGenerator.generator(PenchantFlag.ZOMBIE_SPAWN_PICKAXE));
+        lootPack.addProvider(FlagTagGenerator.generator(PenchantFlag.ZOMBIE_SPAWN_PICKAXE, PenchantFlag.REPLACE_BOOK_LOOT_TAG));
         lootPack.addProvider(LootModificationGenerator::new);
         lootPack.addProvider(LootEnchantmentTagGenerator::new);
         lootPack.addProvider(LootAdvancementGenerator::new);
@@ -50,9 +50,6 @@ public class PenchantDataGenerator implements DataGeneratorEntrypoint {
 
         var dropPack = createPack(fabricDataGenerator, PenchantModules.GUARANTEED_DROPS);
         dropPack.addProvider(FlagTagGenerator.generator(PenchantFlag.GUARANTEED_ENCHANTED_DROP, PenchantFlag.GUARANTEED_TRIDENT_DROP));
-
-        var noCursePack = createPack(fabricDataGenerator, PenchantModules.REDUCED_CURSES);
-        noCursePack.addProvider(CurseEnchantmentTagGenerator::new);
 
         var librarianPack = createPack(fabricDataGenerator, PenchantModules.RANDOMIZED_LIBRARIANS);
         librarianPack.addProvider(VillagerTradeGenerator::new);

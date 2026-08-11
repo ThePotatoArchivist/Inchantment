@@ -10,6 +10,7 @@
     "minecraft:impaling",
     "minecraft:loyalty",
     "minecraft:lure",
+    "minecraft:density",
     {
       "id": "enderscape:resonance",
       "required": false

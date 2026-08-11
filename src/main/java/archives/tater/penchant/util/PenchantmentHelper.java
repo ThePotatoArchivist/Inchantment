@@ -70,7 +70,7 @@ public class PenchantmentHelper {
     }
 
     public static boolean hasEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-        return getEnchantments(stack).getLevel(enchantment) > 0;
+        return getEnchantments(stack).keySet().contains(enchantment);
     }
 
     public static boolean canEnchant(ItemStack stack, Holder<Enchantment> enchantment) {

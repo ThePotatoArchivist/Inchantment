@@ -1,6 +1,7 @@
 package archives.tater.penchant.registry;
 
 import archives.tater.penchant.Penchant;
+import archives.tater.penchant.PenchantmentDefinition;
 import archives.tater.penchant.component.EnchantmentProgress;
 import archives.tater.penchant.component.RandomEnchantment;
 
@@ -54,6 +55,15 @@ public class PenchantComponents {
             RandomEnchantment.CODEC,
             RandomEnchantment.STREAM_CODEC,
             true
+    );
+
+    // Set on the minecraft:enchantment registry, not for use in ItemStacks
+    public static final DataComponentType<PenchantmentDefinition> PENCHANTMENT_DEFINITION = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Penchant.id("definition"),
+            DataComponentType.<PenchantmentDefinition>builder()
+                    .persistent(PenchantmentDefinition.CODEC)
+                    .build()
     );
 
     public static void init() {

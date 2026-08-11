@@ -1,6 +1,7 @@
 package archives.tater.penchant;
 
 import archives.tater.penchant.network.PenchantmentDefinitionsPayload;
+import archives.tater.penchant.registry.PenchantComponents;
 import archives.tater.penchant.registry.PenchantRegistries;
 
 import com.mojang.serialization.Codec;
@@ -57,10 +58,14 @@ public record PenchantmentDefinition(
     }
 
     public static PenchantmentDefinition createFallback(Holder<Enchantment> enchantment) {
+        return createFallback(enchantment.value());
+    }
+
+    public static PenchantmentDefinition createFallback(Enchantment enchantment) {
         return new PenchantmentDefinition(
-                enchantment.value().getAnvilCost(),
-                max(2 * enchantment.value().getMinCost(1) - 5, 0),
-                enchantment.value().definition().maxCost()
+                enchantment.getAnvilCost(),
+                max(2 * enchantment.getMinCost(1) - 5, 0),
+                enchantment.definition().maxCost()
         );
     }
 
@@ -92,6 +97,6 @@ public record PenchantmentDefinition(
     }
 
     public static PenchantmentDefinition getDefinition(Holder<Enchantment> enchantment) {
-        return requireNonNull(CACHE.get(enchantment));
+        return requireNonNull(enchantment.components().get(PenchantComponents.PENCHANTMENT_DEFINITION));
     }
 }

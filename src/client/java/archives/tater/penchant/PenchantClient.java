@@ -102,10 +102,10 @@ public class PenchantClient implements ClientModInitializer {
         });
 
         ClientConfigurationConnectionEvents.COMPLETE.register((listener, client) -> {
-            PenchantmentDefinition.setReceivedCache(
-                    listener.getPacketContext().orElseThrow(DEFINITIONS),
-                    listener.getPacketContext().orElseThrow(PacketContext.REGISTRY_ACCESS)
-            );
+//            PenchantmentDefinition.setReceivedCache(
+//                    listener.getPacketContext().orElseThrow(DEFINITIONS),
+//                    listener.getPacketContext().orElseThrow(PacketContext.REGISTRY_ACCESS)
+//            );
         });
 	}
 }

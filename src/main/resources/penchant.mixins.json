@@ -6,6 +6,7 @@
     "anvil.AnvilMenuMixin",
     "bookshelf.EnchantingTableBlockMixin",
     "bookshelf.EnchantmentMenuMixin",
+    "component.DataComponentInitializersMixin",
     "disable.CreativeModeTabsMixin",
     "disable.EnchantmentHelperMixin",
     "disable.EnchantRandomlyFunctionMixin",

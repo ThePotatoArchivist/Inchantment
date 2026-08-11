@@ -1,5 +1,6 @@
 package archives.tater.penchant;
 
+import archives.tater.penchant.component.GenericInitializerContext;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
@@ -10,10 +11,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,11 +53,15 @@ public class Penchant implements ModInitializer {
         );
 
         ServerConfigurationConnectionEvents.CONFIGURE.register((listener, server) -> {
-            ServerConfigurationNetworking.send(listener, PenchantmentDefinition.createPayload(server.registryAccess()));
+//            ServerConfigurationNetworking.send(listener, PenchantmentDefinition.createPayload(server.registryAccess()));
         });
 
         PayloadTypeRegistry.serverboundPlay().register(EnchantPayload.TYPE, EnchantPayload.CODEC);
         PayloadTypeRegistry.clientboundConfiguration().register(PenchantmentDefinitionsPayload.TYPE, PenchantmentDefinitionsPayload.CODEC);
+
+        ((GenericInitializerContext) BuiltInRegistries.DATA_COMPONENT_INITIALIZERS).penchant$registerGenericInitializer(Registries.ENCHANTMENT, (components, context, key) -> {
+            components.set(PenchantComponents.PENCHANTMENT_DEFINITION, context.getOrThrow(ResourceKey.create(PenchantRegistries.PENCHANTMENT_DEFINITION, key.identifier())).value());
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(EnchantPayload.TYPE, (payload, context) -> {
             if (!(context.player().containerMenu instanceof PenchantmentMenu menu)) {

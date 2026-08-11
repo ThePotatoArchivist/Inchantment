@@ -13,6 +13,6 @@ public class PenchantRegistries {
     public static final ResourceKey<Registry<PenchantmentDefinition>> PENCHANTMENT_DEFINITION = ResourceKey.createRegistryKey(Penchant.id("definition"));
 
     public static void init() {
-        DynamicRegistries.registerSynced(PENCHANTMENT_DEFINITION, PenchantmentDefinition.CODEC);
+        DynamicRegistries.register(PENCHANTMENT_DEFINITION, PenchantmentDefinition.CODEC);
     }
 }

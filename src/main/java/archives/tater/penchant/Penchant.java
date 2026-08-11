@@ -3,11 +3,14 @@ package archives.tater.penchant;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
+import archives.tater.penchant.network.PenchantmentDefinitionsPayload;
 import archives.tater.penchant.registry.*;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.resources.Identifier;
@@ -46,7 +49,12 @@ public class Penchant implements ModInitializer {
             PenchantmentDefinition.buildCache(server.registryAccess())
         );
 
+        ServerConfigurationConnectionEvents.CONFIGURE.register((listener, server) -> {
+            ServerConfigurationNetworking.send(listener, PenchantmentDefinition.createPayload(server.registryAccess()));
+        });
+
         PayloadTypeRegistry.serverboundPlay().register(EnchantPayload.TYPE, EnchantPayload.CODEC);
+        PayloadTypeRegistry.clientboundConfiguration().register(PenchantmentDefinitionsPayload.TYPE, PenchantmentDefinitionsPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(EnchantPayload.TYPE, (payload, context) -> {
             if (!(context.player().containerMenu instanceof PenchantmentMenu menu)) {

@@ -3,7 +3,6 @@ package archives.tater.penchant;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
-import archives.tater.penchant.network.UnlockedEnchantmentsPayload;
 import archives.tater.penchant.registry.*;
 
 import net.fabricmc.api.ModInitializer;
@@ -47,7 +46,6 @@ public class Penchant implements ModInitializer {
             PenchantmentDefinition.buildCache(server.registryAccess())
         );
 
-        PayloadTypeRegistry.clientboundPlay().register(UnlockedEnchantmentsPayload.TYPE, UnlockedEnchantmentsPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(EnchantPayload.TYPE, EnchantPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(EnchantPayload.TYPE, (payload, context) -> {

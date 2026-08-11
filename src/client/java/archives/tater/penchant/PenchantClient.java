@@ -5,15 +5,12 @@ import archives.tater.penchant.client.KeyMappingExt;
 import archives.tater.penchant.client.PenchantClientConfig;
 import archives.tater.penchant.client.gui.screen.PenchantmentScreen;
 import archives.tater.penchant.component.EnchantmentProgress;
-import archives.tater.penchant.menu.PenchantmentMenu;
-import archives.tater.penchant.network.UnlockedEnchantmentsPayload;
 import archives.tater.penchant.registry.PenchantComponents;
 import archives.tater.penchant.registry.PenchantMenus;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -94,14 +91,6 @@ public class PenchantClient implements ClientModInitializer {
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             PenchantmentDefinition.buildCache(requireNonNull(client.level).registryAccess());
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(UnlockedEnchantmentsPayload.TYPE, (payload, context) -> {
-            if (!(context.player().containerMenu instanceof PenchantmentMenu menu)) {
-                Penchant.LOGGER.warn("Recieved enchantments payload but enchantment menu was not open");
-                return;
-            }
-            menu.setUnlockedEnchantments(payload.unlocked());
         });
 
         ItemComponentTooltipProviderRegistry.addBefore(DataComponents.STORED_ENCHANTMENTS, PenchantComponents.RANDOM_ENCHANTMENT);

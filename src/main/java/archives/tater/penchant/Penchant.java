@@ -4,13 +4,10 @@ import archives.tater.penchant.component.GenericInitializerContext;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
-import archives.tater.penchant.network.PenchantmentDefinitionsPayload;
 import archives.tater.penchant.registry.*;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,16 +45,7 @@ public class Penchant implements ModInitializer {
         PenchantModules.init();
         LootModification.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server ->
-            PenchantmentDefinition.buildCache(server.registryAccess())
-        );
-
-        ServerConfigurationConnectionEvents.CONFIGURE.register((listener, server) -> {
-//            ServerConfigurationNetworking.send(listener, PenchantmentDefinition.createPayload(server.registryAccess()));
-        });
-
         PayloadTypeRegistry.serverboundPlay().register(EnchantPayload.TYPE, EnchantPayload.CODEC);
-        PayloadTypeRegistry.clientboundConfiguration().register(PenchantmentDefinitionsPayload.TYPE, PenchantmentDefinitionsPayload.CODEC);
 
         ((GenericInitializerContext) BuiltInRegistries.DATA_COMPONENT_INITIALIZERS).penchant$registerGenericInitializer(Registries.ENCHANTMENT, (components, context, key) -> {
             components.set(PenchantComponents.PENCHANTMENT_DEFINITION, context.getOrThrow(ResourceKey.create(PenchantRegistries.PENCHANTMENT_DEFINITION, key.identifier())).value());

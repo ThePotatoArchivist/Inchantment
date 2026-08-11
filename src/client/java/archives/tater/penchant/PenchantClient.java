@@ -5,16 +5,12 @@ import archives.tater.penchant.client.KeyMappingExt;
 import archives.tater.penchant.client.PenchantClientConfig;
 import archives.tater.penchant.client.gui.screen.PenchantmentScreen;
 import archives.tater.penchant.component.EnchantmentProgress;
-import archives.tater.penchant.network.PenchantmentDefinitionsPayload;
 import archives.tater.penchant.registry.PenchantComponents;
 import archives.tater.penchant.registry.PenchantMenus;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
-import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.fabricmc.loader.api.FabricLoader;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -29,8 +25,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-
-import java.util.List;
 
 import static net.minecraft.util.Util.makeDescriptionId;
 
@@ -50,8 +44,6 @@ public class PenchantClient implements ClientModInitializer {
     public static final PenchantClientConfig CONFIG = PenchantClientConfig.createToml(FabricLoader.getInstance().getConfigDir(), Penchant.MOD_ID, "client", PenchantClientConfig.class);
 
     public static final ScopedValue<ItemStack> TOOLTIP_ITEM = ScopedValue.newInstance();
-
-    private static final PacketContext.Key<List<PenchantmentDefinition>> DEFINITIONS = PacketContext.key(Penchant.id("definitions"));
 
     public static boolean shouldShowProgress() {
         return CONFIG.alwaysShowTooltipProgress || SHOW_PROGRESS_KEYBIND.isDownAnywhere();
@@ -96,16 +88,5 @@ public class PenchantClient implements ClientModInitializer {
         MenuScreens.register(PenchantMenus.PENCHANTMENT_MENU, PenchantmentScreen::new);
 
         ItemComponentTooltipProviderRegistry.addBefore(DataComponents.STORED_ENCHANTMENTS, PenchantComponents.RANDOM_ENCHANTMENT);
-
-        ClientConfigurationNetworking.registerGlobalReceiver(PenchantmentDefinitionsPayload.TYPE, (payload, context) -> {
-            context.packetContext().set(DEFINITIONS, payload.definitions());
-        });
-
-        ClientConfigurationConnectionEvents.COMPLETE.register((listener, client) -> {
-//            PenchantmentDefinition.setReceivedCache(
-//                    listener.getPacketContext().orElseThrow(DEFINITIONS),
-//                    listener.getPacketContext().orElseThrow(PacketContext.REGISTRY_ACCESS)
-//            );
-        });
 	}
 }

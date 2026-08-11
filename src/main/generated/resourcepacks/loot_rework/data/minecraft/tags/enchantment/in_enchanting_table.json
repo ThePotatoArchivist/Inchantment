@@ -1,8 +1,6 @@
 {
-  "fabric:remove": [
-    "#penchant:uncommon",
-    "#penchant:rare",
-    "#penchant:unique"
-  ],
-  "values": []
+  "replace": true,
+  "values": [
+    "#penchant:common"
+  ]
 }

@@ -19,7 +19,7 @@ public class EnchantWithLevelsFunctionMixin {
             method = "run",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/core/RegistryAccess;Ljava/util/Optional;)Lnet/minecraft/world/item/ItemStack;")
     )
-    private static ItemStack addProgress(ItemStack original, @Local(argsOnly = true) LootContext context) {
+    private static ItemStack addProgress(ItemStack original, @Local(argsOnly = true, name = "context") LootContext context) {
         if (EnchantmentHelper.getComponentType(original) == DataComponents.STORED_ENCHANTMENTS) return original;
 
         EnchantmentProgress.addRandomProgress(original, context.getRandom());

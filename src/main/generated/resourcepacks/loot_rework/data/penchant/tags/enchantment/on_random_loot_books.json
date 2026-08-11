@@ -1,5 +1,6 @@
 {
   "fabric:remove": [
+    "#penchant:common",
     "#minecraft:curse"
   ],
   "values": []

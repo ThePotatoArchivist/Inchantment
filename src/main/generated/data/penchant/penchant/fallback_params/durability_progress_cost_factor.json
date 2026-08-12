@@ -1,0 +1,6 @@
+{
+  "coefficient": 0.01,
+  "max": 8,
+  "min": 1,
+  "source": "max_durability"
+}

@@ -1,15 +1,25 @@
 package archives.tater.penchant;
 
 import archives.tater.penchant.datagen.*;
+import archives.tater.penchant.registry.PenchantFallbackParams;
 import archives.tater.penchant.registry.PenchantFlag;
 import archives.tater.penchant.registry.PenchantModules;
+import archives.tater.penchant.registry.PenchantRegistries;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.resources.Identifier;
 
+import static archives.tater.penchant.datagen.DynamicRegistryGen.dynamicRegistry;
+
 public class PenchantDataGenerator implements DataGeneratorEntrypoint {
+
+    @Override
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+        registryBuilder.add(PenchantRegistries.FALLBACK_PARAMS, PenchantFallbackParams::bootstrap);
+    }
 
     private static FabricDataGenerator.Pack createPack(FabricDataGenerator fabricDataGenerator, Identifier id) {
         var pack = fabricDataGenerator.createBuiltinResourcePack(id);
@@ -24,6 +34,7 @@ public class PenchantDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(EnchantmentTagGenerator::new);
         pack.addProvider(BlockTagGenerator::new);
         pack.addProvider(ItemTagGenerator::new);
+        pack.addProvider(dynamicRegistry(PenchantRegistries.FALLBACK_PARAMS));
 //        pack.addProvider(PenchantmentDefinitionGenerator::new);
 
         var durabilityPack = createPack(fabricDataGenerator, PenchantModules.DURABILITY_REWORK);

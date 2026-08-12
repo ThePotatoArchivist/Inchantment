@@ -1,9 +1,10 @@
 package archives.tater.penchant.registry;
 
 import archives.tater.penchant.Penchant;
-import archives.tater.penchant.definition.PenchantmentDefinition;
 import archives.tater.penchant.component.EnchantmentProgress;
+import archives.tater.penchant.component.GenericInitializerContext;
 import archives.tater.penchant.component.RandomEnchantment;
+import archives.tater.penchant.definition.PenchantmentDefinition;
 
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 
@@ -12,14 +13,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
 
 import org.jspecify.annotations.Nullable;
-
-import static net.minecraft.util.Mth.clamp;
 
 public class PenchantComponents {
     private static <T> DataComponentType<T> register(String path, @Nullable Codec<T> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec, boolean cache) {
@@ -70,11 +71,16 @@ public class PenchantComponents {
         DefaultItemComponentEvents.MODIFY.register(context -> {
             context.modify(
                     item -> item.components().has(DataComponents.MAX_DAMAGE),
-                    (builder, item) -> {
+                    (builder, provider, item) -> {
                         if (!builder.contains(ENCHANTMENT_PROGRESS_COST_FACTOR))
-                            builder.set(ENCHANTMENT_PROGRESS_COST_FACTOR, clamp(item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0) / 100, 1, 8));
+                            builder.set(ENCHANTMENT_PROGRESS_COST_FACTOR, PenchantFallbackParams.calculate(provider, item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0)));
                     }
             );
         });
+
+        ((GenericInitializerContext) BuiltInRegistries.DATA_COMPONENT_INITIALIZERS).penchant$registerGenericInitializer(
+                Registries.ENCHANTMENT, (components, context, key) -> {
+                    components.set(PenchantComponents.PENCHANTMENT_DEFINITION, context.getOrThrow(ResourceKey.create(PenchantRegistries.PENCHANTMENT_DEFINITION, key.identifier())).value());
+                });
     }
 }

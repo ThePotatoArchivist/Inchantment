@@ -1,0 +1,6 @@
+// 26.2	-999999999-01-01T00:00:00	Penchant/Dynamic Registries
+dde29f840b66285bd36b7f0212b43ea801cd778f data/penchant/penchant/fallback_params/book_requirement.json
+526d8a1546df17f978e98ca1790968b0f5b588e3 data/penchant/penchant/fallback_params/durability_progress_cost_factor.json
+cbea69187db3872de0a14c2ce0455ddaf87de546 data/penchant/penchant/fallback_params/experience_cost.json
+99a2277bd458ba684116381b60837c32cab51da9 data/penchant/penchant/fallback_params/progress_cost_factor_base.json
+99a2277bd458ba684116381b60837c32cab51da9 data/penchant/penchant/fallback_params/progress_cost_factor_increase.json

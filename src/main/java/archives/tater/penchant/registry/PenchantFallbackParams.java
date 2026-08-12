@@ -10,6 +10,8 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 
+import java.util.Set;
+
 public interface PenchantFallbackParams {
     private static ResourceKey<PenchantmentFormula> create(String path) {
         return ResourceKey.create(PenchantRegistries.FALLBACK_PARAMS, Penchant.id(path));
@@ -20,6 +22,14 @@ public interface PenchantFallbackParams {
     ResourceKey<PenchantmentFormula> PROGRESS_COST_FACTOR_BASE = create("progress_cost_factor_base");
     ResourceKey<PenchantmentFormula> PROGRESS_COST_FACTOR_INCREASE = create("progress_cost_factor_increase");
     ResourceKey<PenchantmentFormula> DURABILITY_PROGRESS_COST_FACTOR = create("durability_progress_cost_factor");
+
+    Set<ResourceKey<PenchantmentFormula>> KEYS = Set.of(
+            EXPERIENCE_COST,
+            BOOK_REQUIREMENT,
+            PROGRESS_COST_FACTOR_BASE,
+            PROGRESS_COST_FACTOR_INCREASE,
+            DURABILITY_PROGRESS_COST_FACTOR
+    );
 
     static void bootstrap(BootstrapContext<PenchantmentFormula> context) {
         context.register(EXPERIENCE_COST, new PenchantmentFormula(NumberSource.ANVIL_COST));

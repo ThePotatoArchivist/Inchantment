@@ -21,7 +21,7 @@ public class PenchantRegistries {
             registryView.registerEntryAdded(Registries.ENCHANTMENT, (rawId, id, enchantment) -> {
                 var definitions = registryView.getOptional(PENCHANTMENT_DEFINITION).orElseThrow();
                 if (definitions.containsKey(id)) return;
-                Registry.register(definitions, id, Penchant.FALLBACK_PARAMETERS.getParameters().createFallback(enchantment));
+                Registry.register(definitions, id, Penchant.FALLBACK_PARAMS.getParams().createFallback(enchantment));
             });
         });
     }

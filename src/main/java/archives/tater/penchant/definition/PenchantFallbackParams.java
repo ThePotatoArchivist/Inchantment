@@ -4,18 +4,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantment.EnchantmentDefinition;
 
 import static java.lang.Math.max;
 
-public interface PenchantFallbackParameters {
+public record PenchantFallbackParams(
+    Formula experienceCost,
+    Formula bookRequirement,
+    Formula progressCostFactorBase,
+    Formula progressCostFactorIncrease
+) {
+    public static final Codec<PenchantFallbackParams> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Formula.CODEC.fieldOf("experience_cost").forGetter(PenchantFallbackParams::experienceCost),
+            Formula.CODEC.fieldOf("book_requirement").forGetter(PenchantFallbackParams::bookRequirement),
+            Formula.CODEC.fieldOf("progress_cost_factor_base").forGetter(PenchantFallbackParams::progressCostFactorBase),
+            Formula.CODEC.fieldOf("progress_cost_factor_increase").forGetter(PenchantFallbackParams::progressCostFactorIncrease)
+    ).apply(instance, PenchantFallbackParams::new));
 
-    Formula experienceCost();
-    Formula bookRequirement();
-    Formula progressCostFactorBase();
-    Formula progressCostFactorIncrease();
-
-    default PenchantmentDefinition createFallback(Enchantment enchantment) {
+    public PenchantmentDefinition createFallback(Enchantment enchantment) {
         return new PenchantmentDefinition(
                 experienceCost().calculate(enchantment.definition(), 1),
                 bookRequirement().calculate(enchantment.definition(), 0),
@@ -26,7 +31,7 @@ public interface PenchantFallbackParameters {
         );
     }
 
-    record Formula(NumberSource source, int coefficient, int constant) {
+    public record Formula(NumberSource source, int coefficient, int constant) {
 
         public static final Codec<Formula> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 NumberSource.CODEC.fieldOf("source").forGetter(Formula::source),
@@ -38,16 +43,16 @@ public interface PenchantFallbackParameters {
             this(source, 1, 0);
         }
 
-        int calculate(EnchantmentDefinition definition) {
+        int calculate(Enchantment.EnchantmentDefinition definition) {
             return coefficient * source.get(definition) + constant;
         }
 
-        int calculate(EnchantmentDefinition definition, int min) {
+        int calculate(Enchantment.EnchantmentDefinition definition, int min) {
             return max(min, calculate(definition));
         }
     }
 
-    enum NumberSource implements StringRepresentable {
+    public enum NumberSource implements StringRepresentable {
         WEIGHT("weight"),
         MAX_LEVEL("max_level"),
         MIN_COST_BASE("min_cost_base"),
@@ -66,7 +71,7 @@ public interface PenchantFallbackParameters {
             this.name = name;
         }
 
-        public int get(EnchantmentDefinition definition) {
+        public int get(Enchantment.EnchantmentDefinition definition) {
             return switch (this) {
                 case WEIGHT -> definition.weight();
                 case MAX_LEVEL -> definition.maxLevel();

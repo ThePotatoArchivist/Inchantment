@@ -1,7 +1,7 @@
 package archives.tater.penchant;
 
 import archives.tater.penchant.component.GenericInitializerContext;
-import archives.tater.penchant.definition.PenchantFallbackParameterManager;
+import archives.tater.penchant.definition.PenchantFallbackParamsManager;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
@@ -37,7 +37,7 @@ public class Penchant implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static final PenchantFallbackParameterManager FALLBACK_PARAMETERS = new PenchantFallbackParameterManager();
+    public static final PenchantFallbackParamsManager FALLBACK_PARAMS = new PenchantFallbackParamsManager();
 
     @Override
 	public void onInitialize() {
@@ -64,6 +64,6 @@ public class Penchant implements ModInitializer {
             menu.handleEnchant(payload.enchantment());
         });
 
-        ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(PenchantFallbackParameterManager.ID, FALLBACK_PARAMETERS);
+        ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(PenchantFallbackParamsManager.ID, FALLBACK_PARAMS);
     }
 }

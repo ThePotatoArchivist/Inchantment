@@ -1,4 +1,4 @@
-package archives.tater.penchant;
+package archives.tater.penchant.definition;
 
 import archives.tater.penchant.registry.PenchantComponents;
 import archives.tater.penchant.registry.PenchantRegistries;
@@ -47,18 +47,6 @@ public record PenchantmentDefinition(
 
     public static ResourceKey<PenchantmentDefinition> keyOf(ResourceKey<Enchantment> enchantment) {
         return ResourceKey.create(PenchantRegistries.PENCHANTMENT_DEFINITION, enchantment.identifier());
-    }
-
-    public static PenchantmentDefinition createFallback(Holder<Enchantment> enchantment) {
-        return createFallback(enchantment.value());
-    }
-
-    public static PenchantmentDefinition createFallback(Enchantment enchantment) {
-        return new PenchantmentDefinition(
-                enchantment.getAnvilCost(),
-                max(2 * enchantment.getMinCost(1) - 5, 0),
-                enchantment.definition().maxCost()
-        );
     }
 
     public static PenchantmentDefinition getDefinition(Holder<Enchantment> enchantment) {

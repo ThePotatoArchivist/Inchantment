@@ -1,7 +1,7 @@
 package archives.tater.penchant.registry;
 
 import archives.tater.penchant.Penchant;
-import archives.tater.penchant.PenchantmentDefinition;
+import archives.tater.penchant.definition.PenchantmentDefinition;
 import archives.tater.penchant.component.EnchantmentProgress;
 import archives.tater.penchant.component.RandomEnchantment;
 

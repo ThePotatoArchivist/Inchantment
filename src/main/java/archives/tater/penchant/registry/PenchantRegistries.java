@@ -1,7 +1,7 @@
 package archives.tater.penchant.registry;
 
 import archives.tater.penchant.Penchant;
-import archives.tater.penchant.PenchantmentDefinition;
+import archives.tater.penchant.definition.PenchantmentDefinition;
 
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
@@ -21,7 +21,7 @@ public class PenchantRegistries {
             registryView.registerEntryAdded(Registries.ENCHANTMENT, (rawId, id, enchantment) -> {
                 var definitions = registryView.getOptional(PENCHANTMENT_DEFINITION).orElseThrow();
                 if (definitions.containsKey(id)) return;
-                Registry.register(definitions, id, PenchantmentDefinition.createFallback(enchantment));
+                Registry.register(definitions, id, Penchant.FALLBACK_PARAMETERS.getParameters().createFallback(enchantment));
             });
         });
     }

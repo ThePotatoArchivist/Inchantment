@@ -1,6 +1,6 @@
 package archives.tater.penchant.datagen;
 
-import archives.tater.penchant.PenchantmentDefinition;
+import archives.tater.penchant.definition.PenchantmentDefinition;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;

@@ -1,6 +1,6 @@
 package archives.tater.penchant.util;
 
-import archives.tater.penchant.PenchantmentDefinition;
+import archives.tater.penchant.definition.PenchantmentDefinition;
 import archives.tater.penchant.api.CanEnchantCallback;
 import archives.tater.penchant.registry.PenchantFlag;
 

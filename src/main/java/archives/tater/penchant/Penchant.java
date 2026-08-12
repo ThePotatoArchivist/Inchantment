@@ -1,6 +1,7 @@
 package archives.tater.penchant;
 
 import archives.tater.penchant.component.GenericInitializerContext;
+import archives.tater.penchant.definition.PenchantFallbackParameterManager;
 import archives.tater.penchant.loot.LootModification;
 import archives.tater.penchant.menu.PenchantmentMenu;
 import archives.tater.penchant.network.EnchantPayload;
@@ -9,11 +10,13 @@ import archives.tater.penchant.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.PackType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +36,8 @@ public class Penchant implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+    public static final PenchantFallbackParameterManager FALLBACK_PARAMETERS = new PenchantFallbackParameterManager();
 
     @Override
 	public void onInitialize() {
@@ -58,5 +63,7 @@ public class Penchant implements ModInitializer {
             }
             menu.handleEnchant(payload.enchantment());
         });
+
+        ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(PenchantFallbackParameterManager.ID, FALLBACK_PARAMETERS);
     }
 }

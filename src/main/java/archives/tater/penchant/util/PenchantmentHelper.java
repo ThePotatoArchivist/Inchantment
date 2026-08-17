@@ -1,7 +1,7 @@
 package archives.tater.penchant.util;
 
-import archives.tater.penchant.PenchantmentDefinition;
 import archives.tater.penchant.api.CanEnchantCallback;
+import archives.tater.penchant.registry.PenchantComponents;
 import archives.tater.penchant.registry.PenchantFlag;
 
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
 public class PenchantmentHelper {
     public static final boolean ITEM_DESCRIPTIONS_INSTALLED = FabricLoader.getInstance().isModLoaded("item_descriptions");
+    private static final Enchantment.Cost DEFAULT_COST = new Enchantment.Cost(1, 0);
 
     private PenchantmentHelper() {}
 
@@ -48,15 +50,15 @@ public class PenchantmentHelper {
     }
 
     public static int getProgressCostFactor(Holder<Enchantment> enchantment, int targetLevel) {
-        return PenchantmentDefinition.getDefinition(enchantment).getProgressCostFactor(targetLevel);
+        return max(enchantment.getOrDefault(PenchantComponents.PROGRESS_COST_FACTOR, DEFAULT_COST).calculate(targetLevel), 1);
     }
 
     public static int getBookRequirement(Holder<Enchantment> enchantment) {
-        return PenchantmentDefinition.getDefinition(enchantment).bookRequirement();
+        return enchantment.getOrDefault(PenchantComponents.BOOK_REQUIREMENT, 0);
     }
 
     public static int getXpLevelCost(Holder<Enchantment> enchantment) {
-        return PenchantmentDefinition.getDefinition(enchantment).experienceCost();
+        return enchantment.getOrDefault(PenchantComponents.EXPERIENCE_COST, 0);
     }
 
     public static boolean canEnchantItem(ItemStack stack, Holder<Enchantment> enchantment) {

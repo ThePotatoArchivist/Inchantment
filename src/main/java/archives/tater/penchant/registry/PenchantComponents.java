@@ -15,12 +15,17 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import org.jspecify.annotations.Nullable;
 
 import static net.minecraft.util.Mth.clamp;
 
 public class PenchantComponents {
+    private static <T> DataComponentType<T> register(String path, @Nullable Codec<T> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
+        return register(path, codec, streamCodec, false);
+    }
+
     private static <T> DataComponentType<T> register(String path, @Nullable Codec<T> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec, boolean cache) {
         return register(path, codec, streamCodec, cache, false);
     }
@@ -45,8 +50,7 @@ public class PenchantComponents {
     public static final DataComponentType<Integer> ENCHANTMENT_PROGRESS_COST_FACTOR = register(
             "enchantment_progress_cost_factor",
             ExtraCodecs.NON_NEGATIVE_INT,
-            ByteBufCodecs.INT,
-            false
+            ByteBufCodecs.INT
     );
 
     public static final DataComponentType<RandomEnchantment> RANDOM_ENCHANTMENT = register(
@@ -54,6 +58,24 @@ public class PenchantComponents {
             RandomEnchantment.CODEC,
             RandomEnchantment.STREAM_CODEC,
             true
+    );
+
+    public static final DataComponentType<Integer> EXPERIENCE_COST = register(
+            "experience_cost",
+            ExtraCodecs.NON_NEGATIVE_INT,
+            ByteBufCodecs.INT
+    );
+
+    public static final DataComponentType<Integer> BOOK_REQUIREMENT = register(
+            "book_requirement",
+            ExtraCodecs.NON_NEGATIVE_INT,
+            ByteBufCodecs.INT
+    );
+
+    public static final DataComponentType<Enchantment.Cost> PROGRESS_COST_FACTOR = register(
+            "progress_cost_factor",
+            Enchantment.Cost.CODEC,
+            Penchant.COST_STREAM_CODEC
     );
 
     public static void init() {

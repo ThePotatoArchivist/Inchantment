@@ -8,6 +8,8 @@ import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 
+import static net.minecraft.util.Mth.clamp;
+
 public class FontUtils {
 
     private FontUtils() {}
@@ -21,8 +23,9 @@ public class FontUtils {
     public static final Component THIN_SPACE_TEXT = Component.literal(THIN_SPACE).withStyle(style -> style.withFont(FONT));
 
     public static MutableComponent getBar(int width, int progress) {
-        return Component.literal(BAR_SEGMENT.repeat(progress))
-                .append(Component.literal(BAR_SEGMENT.repeat(width - progress))
+        var filled = clamp(progress, 0, width);
+        return Component.literal(BAR_SEGMENT.repeat(filled))
+                .append(Component.literal(BAR_SEGMENT.repeat(width - filled))
                         .withStyle(ChatFormatting.DARK_GRAY))
                 .withStyle(ChatFormatting.LIGHT_PURPLE)
                 .withStyle(style -> style.withFont(FONT));

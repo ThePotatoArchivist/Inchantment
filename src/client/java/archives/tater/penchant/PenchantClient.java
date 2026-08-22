@@ -26,6 +26,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import static java.util.Objects.requireNonNull;
+import static net.minecraft.util.Mth.clamp;
 import static net.minecraft.util.Util.makeDescriptionId;
 
 
@@ -69,12 +70,13 @@ public class PenchantClient implements ClientModInitializer {
                     .withStyle(ChatFormatting.LIGHT_PURPLE);
 
         var maxProgress = EnchantmentProgress.getMaxProgress(enchantment, level, maxDamage);
+        var storedProgress = clamp(progress.getProgress(enchantment), 0, maxProgress);
 
         return Component.literal("  ")
-                .append(FontUtils.getBar(getBarWidth(), getBarWidth() * progress.getProgress(enchantment) / maxProgress))
+                .append(FontUtils.getBar(getBarWidth(), getBarWidth() * storedProgress / maxProgress))
                 .append(" ")
                 .append(Component.translatable("penchant.tooltip.progress",
-                        Component.literal(Integer.toString(progress.getProgress(enchantment))).withStyle(ChatFormatting.LIGHT_PURPLE),
+                        Component.literal(Integer.toString(storedProgress)).withStyle(ChatFormatting.LIGHT_PURPLE),
                         maxProgress
                 ).withStyle(ChatFormatting.DARK_GRAY))
                 ;

@@ -43,7 +43,11 @@ public class PenchantClient implements ClientModInitializer {
             PENCHANT_CATEGORY
     );
 
-    public static final PenchantClientConfig CONFIG = PenchantClientConfig.createToml(FabricLoader.getInstance().getConfigDir(), Penchant.MOD_ID, "client", PenchantClientConfig.class);
+    public static final PenchantClientConfig CONFIG = PenchantClientConfig.createToml(
+            FabricLoader.getInstance().getConfigDir(),
+            Penchant.MOD_ID,
+            "client"
+    );
 
     public static final ScopedValue<ItemStack> TOOLTIP_ITEM = ScopedValue.newInstance();
 

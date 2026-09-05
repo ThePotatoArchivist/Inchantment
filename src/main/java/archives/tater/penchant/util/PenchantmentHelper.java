@@ -61,7 +61,7 @@ public class PenchantmentHelper {
 
     public static boolean canEnchantItem(ItemStack stack, Holder<Enchantment> enchantment) {
         return CanEnchantCallback.ITEM.invoker().canEnchant(stack, enchantment).orElseGet(() ->
-                stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK) || stack.canBeEnchantedWith(enchantment, EnchantingContext.ACCEPTABLE)
+                stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK) || stack.getItem().getDefaultInstance().canBeEnchantedWith(enchantment, EnchantingContext.ACCEPTABLE)
         );
     }
 
@@ -75,7 +75,7 @@ public class PenchantmentHelper {
 
     public static boolean canEnchant(ItemStack stack, Holder<Enchantment> enchantment) {
         return !hasEnchantment(stack, enchantment) && CanEnchantCallback.STACK.invoker().canEnchant(stack, enchantment).orElseGet(() ->
-                canEnchantItem(stack, enchantment) && EnchantmentHelper.isEnchantmentCompatible(getEnchantments(stack).keySet(), enchantment)
+                canEnchantItem(stack, enchantment) && stack.canBeEnchantedWith(enchantment, EnchantingContext.ACCEPTABLE) && EnchantmentHelper.isEnchantmentCompatible(getEnchantments(stack).keySet(), enchantment)
         );
     }
 

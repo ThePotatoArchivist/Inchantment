@@ -6,11 +6,14 @@ import archives.tater.penchant.client.PenchantClientConfig;
 import archives.tater.penchant.client.gui.screen.PenchantmentScreen;
 import archives.tater.penchant.component.EnchantmentProgress;
 import archives.tater.penchant.registry.PenchantComponents;
+import archives.tater.penchant.registry.PenchantItemTags;
 import archives.tater.penchant.registry.PenchantMenus;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.item.v1.FabricTooltipFlag;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -27,6 +30,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
+import static archives.tater.penchant.util.PenchantUtil.containsIgnoreStyle;
 import static java.util.Objects.requireNonNull;
 import static net.minecraft.util.Util.makeDescriptionId;
 
@@ -43,9 +47,15 @@ public class PenchantClient implements ClientModInitializer {
             PENCHANT_CATEGORY
     );
 
-    public static final PenchantClientConfig CONFIG = PenchantClientConfig.createToml(FabricLoader.getInstance().getConfigDir(), Penchant.MOD_ID, "client", PenchantClientConfig.class);
+    public static final PenchantClientConfig CONFIG = PenchantClientConfig.createToml(
+            FabricLoader.getInstance().getConfigDir(),
+            Penchant.MOD_ID,
+            "client"
+    );
 
     public static final ScopedValue<ItemStack> TOOLTIP_ITEM = ScopedValue.newInstance();
+
+    public static final Identifier TOOLTIP_EVENT_PHASE = Penchant.id("enchantment_tooltip_modifications");
 
     public static boolean shouldShowProgress() {
         return CONFIG.alwaysShowTooltipProgress || SHOW_PROGRESS_KEYBIND.isDownAnywhere();
@@ -66,7 +76,7 @@ public class PenchantClient implements ClientModInitializer {
 
     public static Component getProgressTooltip(EnchantmentProgress progress, Holder<Enchantment> enchantment, int level, DataComponentGetter components) {
         if (level >= enchantment.value().getMaxLevel())
-            return Component.literal("  ")
+            return Component.literal("   ")
                     .append(FontUtils.getBar(getBarWidth(), getBarWidth()))
                     .append(" ")
                     .append(Component.translatable("penchant.tooltip.progress.max"))
@@ -74,7 +84,7 @@ public class PenchantClient implements ClientModInitializer {
 
         var maxProgress = EnchantmentProgress.getMaxProgress(enchantment, level, components);
 
-        return Component.literal("  ")
+        return Component.literal("   ")
                 .append(FontUtils.getBar(getBarWidth(), getBarWidth() * progress.getProgress(enchantment) / maxProgress))
                 .append(" ")
                 .append(Component.translatable("penchant.tooltip.progress",
@@ -94,5 +104,26 @@ public class PenchantClient implements ClientModInitializer {
         });
 
         ItemComponentTooltipProviderRegistry.addBefore(DataComponents.STORED_ENCHANTMENTS, PenchantComponents.RANDOM_ENCHANTMENT);
+
+        ItemTooltipCallback.EVENT.addPhaseOrdering(Identifier.fromNamespaceAndPath("enchiridion", "enchantment_tooltip_modifications"), TOOLTIP_EVENT_PHASE);
+        ItemTooltipCallback.EVENT.register(TOOLTIP_EVENT_PHASE, (stack, tooltipContext, tooltipFlag, lines) -> {
+            if (stack.has(DataComponents.STORED_ENCHANTMENTS) || stack.is(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS) || !shouldShowProgress() && !((FabricTooltipFlag) tooltipFlag).shouldDisplayAllInformation()) return;
+
+            var enchantments = stack.getEnchantments();
+            if (enchantments.isEmpty()) return;
+            var progress = stack.getOrDefault(PenchantComponents.ENCHANTMENT_PROGRESS, EnchantmentProgress.EMPTY);
+
+            for (var iter = lines.listIterator(); iter.hasNext();) {
+                var line = iter.next();
+
+                for (var entry : enchantments.entrySet()) {
+                    var enchantment = entry.getKey();
+                    if (containsIgnoreStyle(line, enchantment.value().description())) {
+                        iter.add(getProgressTooltip(progress, enchantment, entry.getIntValue(), stack));
+                        break;
+                    }
+                }
+            }
+        });
 	}
 }

@@ -4,7 +4,9 @@ import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.IntegerRange;
 
-public class PenchantClientConfig extends WrappedConfig {
+import java.nio.file.Path;
+
+public class PenchantClientConfig implements WrappedConfig.Section {
 
     @Comment("Whether enchantment progress should always be shown regardless of keypress")
     public boolean alwaysShowTooltipProgress = false;
@@ -16,4 +18,12 @@ public class PenchantClientConfig extends WrappedConfig {
     @Comment("Width of enchantment progress bar")
     @IntegerRange(min = 4, max = 128)
     public int barWidth = 32;
+
+    public static class Wrapper extends WrappedConfig {
+        public PenchantClientConfig client = new PenchantClientConfig();
+    }
+
+    public static PenchantClientConfig createToml(Path configPath, String familyId, String id) {
+        return Wrapper.createToml(configPath, familyId, id, Wrapper.class).client;
+    }
 }

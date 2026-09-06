@@ -7,9 +7,9 @@ import archives.tater.penchant.registry.PenchantEnchantmentTags;
 import archives.tater.penchant.registry.PenchantItemTags;
 import archives.tater.penchant.util.PenchantmentHelper;
 
+import net.fabricmc.fabric.api.item.v1.FabricTooltipFlag;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -45,9 +45,9 @@ public class ItemEnchantmentsMixin {
             method = "addToTooltip",
             at = @At("HEAD")
     )
-    private void getProgress(TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter, CallbackInfo ci, @Share("progress") LocalRef<EnchantmentProgress> progress) {
-        if (dataComponentGetter.get(DataComponents.STORED_ENCHANTMENTS) == null && !PenchantClient.TOOLTIP_ITEM.orElse(ItemStack.EMPTY).is(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS))
-            progress.set(dataComponentGetter.getOrDefault(PenchantComponents.ENCHANTMENT_PROGRESS, EnchantmentProgress.EMPTY));
+    private void getProgress(TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components, CallbackInfo ci, @Share("progress") LocalRef<EnchantmentProgress> progress) {
+        if (components.get(DataComponents.STORED_ENCHANTMENTS) == null && !PenchantClient.TOOLTIP_ITEM.orElse(ItemStack.EMPTY).is(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS))
+            progress.set(components.getOrDefault(PenchantComponents.ENCHANTMENT_PROGRESS, EnchantmentProgress.EMPTY));
     }
 
     @WrapOperation(
@@ -62,34 +62,13 @@ public class ItemEnchantmentsMixin {
         return original.call(enchantment, level);
     }
 
-    @SuppressWarnings("unchecked")
-    @WrapOperation(
-            method = "addToTooltip",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V")
-    )
-    private <T> void addProgress(Consumer<T> instance, T text, Operation<Void> original, @Share("enchantmentShare") LocalRef<@Nullable Holder<Enchantment>> enchantmentShare, @Share("level") LocalIntRef level, @Share("progress") LocalRef<@Nullable EnchantmentProgress> progress, @Local(argsOnly = true) DataComponentGetter components) {
-        original.call(instance, text);
-
-        var enchantment = enchantmentShare.get();
-        if (enchantment == null) return;
-        if (!PenchantClient.shouldShowProgress()) return;
-        if (!EnchantmentProgress.shouldShowTooltip(enchantment)) return;
-
-        instance.accept((T) PenchantClient.getProgressTooltip(
-                progress.get(),
-                enchantment,
-                level.get(),
-                components
-        ));
-    }
-
     @Inject(
             method = "addToTooltip",
             at = @At("TAIL")
     )
-    private void addHint(TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag flag, DataComponentGetter componentGetter, CallbackInfo ci, @Share("progress") LocalRef<@Nullable EnchantmentProgress> progress) {
-        if (progress.get() == null || enchantments.isEmpty() || !PenchantClient.shouldShowKeyHint()) return;
+    private void addHint(TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components, CallbackInfo ci, @Share("progress") LocalRef<@Nullable EnchantmentProgress> progress) {
+        if (progress.get() == null || enchantments.isEmpty() || (!PenchantClient.shouldShowKeyHint() && !((FabricTooltipFlag) flag).shouldDisplayAllInformation())) return;
 
-        tooltipAdder.accept(PenchantClient.getProgressKeyHint());
+        consumer.accept(PenchantClient.getProgressKeyHint());
     }
 }

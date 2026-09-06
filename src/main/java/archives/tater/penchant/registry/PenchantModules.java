@@ -24,8 +24,8 @@ public class PenchantModules {
     @Deprecated
     public static final Identifier REDUCED_CURSES = Penchant.id("reduced_curses");
 
-    private static void registerPack(Identifier id) {
-        registerPack(id, PackActivationType.DEFAULT_ENABLED);
+    private static void registerPack(Identifier id, boolean defaultEnabled) {
+        registerPack(id, defaultEnabled ? PackActivationType.DEFAULT_ENABLED : PackActivationType.NORMAL);
     }
 
     private static void registerPack(Identifier id, PackActivationType activationType) {
@@ -38,12 +38,14 @@ public class PenchantModules {
     }
 
     public static void init() {
-        registerPack(DURABILITY_REWORK);
-        registerPack(BOOKSHELF_PLACEMENT);
-        registerPack(TABLE_REWORK);
-        registerPack(NO_ANVIL_BOOKS);
-        registerPack(LOOT_REWORK);
-        registerPack(GUARANTEED_DROPS);
-        registerPack(RANDOMIZED_LIBRARIANS, PackActivationType.NORMAL);
+        var moduleDefaults = Penchant.CONFIG.moduleDefaults;
+
+        registerPack(DURABILITY_REWORK, moduleDefaults.durabilityRework);
+        registerPack(BOOKSHELF_PLACEMENT, moduleDefaults.bookshelfPlacement);
+        registerPack(TABLE_REWORK, moduleDefaults.tableRework);
+        registerPack(NO_ANVIL_BOOKS, moduleDefaults.noAnvilBooks);
+        registerPack(LOOT_REWORK, moduleDefaults.lootRework);
+        registerPack(GUARANTEED_DROPS, moduleDefaults.guaranteedDrops);
+        registerPack(RANDOMIZED_LIBRARIANS, moduleDefaults.randomizedLibrarians);
     }
 }

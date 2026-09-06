@@ -10,7 +10,6 @@ import archives.tater.penchant.util.PenchantmentHelper;
 import net.fabricmc.fabric.api.item.v1.FabricTooltipFlag;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -61,27 +60,6 @@ public class ItemEnchantmentsMixin {
         enchantmentShare.set(enchantment);
         shareLevel.set(level);
         return original.call(enchantment, level);
-    }
-
-    @SuppressWarnings("unchecked")
-    @WrapOperation(
-            method = "addToTooltip",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V")
-    )
-    private <T> void addProgress(Consumer<T> instance, T text, Operation<Void> original, @Share("enchantmentShare") LocalRef<@Nullable Holder<Enchantment>> enchantmentShare, @Share("level") LocalIntRef level, @Share("progress") LocalRef<@Nullable EnchantmentProgress> progress, @Local(argsOnly = true, name = "components") DataComponentGetter components) {
-        original.call(instance, text);
-
-        var enchantment = enchantmentShare.get();
-        if (enchantment == null) return;
-        if (!PenchantClient.shouldShowProgress()) return;
-        if (!EnchantmentProgress.shouldShowTooltip(enchantment)) return;
-
-        instance.accept((T) PenchantClient.getProgressTooltip(
-                progress.get(),
-                enchantment,
-                level.get(),
-                components
-        ));
     }
 
     @Inject(

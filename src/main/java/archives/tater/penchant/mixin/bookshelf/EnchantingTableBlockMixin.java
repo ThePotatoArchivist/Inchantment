@@ -24,9 +24,8 @@ import java.util.List;
 @Mixin(EnchantingTableBlock.class)
 public class EnchantingTableBlockMixin {
     @Definition(id = "is", method = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z")
-    @Definition(id = "getBlockState", method = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;")
-    @Definition(id = "offset", method = "Lnet/minecraft/core/BlockPos;offset(Lnet/minecraft/core/Vec3i;)Lnet/minecraft/core/BlockPos;")
-    @Expression("?.getBlockState(?.offset(?)).is(?)")
+    @Definition(id = "ENCHANTMENT_POWER_PROVIDER", field = "Lnet/minecraft/tags/BlockTags;ENCHANTMENT_POWER_PROVIDER:Lnet/minecraft/tags/TagKey;")
+    @Expression("?.is(ENCHANTMENT_POWER_PROVIDER)")
     @WrapOperation(
             method = "isValidBookShelf",
             at = @At("MIXINEXTRAS:EXPRESSION")

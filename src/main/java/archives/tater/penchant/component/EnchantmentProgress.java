@@ -85,6 +85,9 @@ public class EnchantmentProgress {
             return new EnchantmentProgress(progress);
         }
 
+        public boolean isEmpty() {
+            return progress.isEmpty();
+        }
     }
 
     public static boolean shouldShowTooltip(Holder<Enchantment> enchantment) {

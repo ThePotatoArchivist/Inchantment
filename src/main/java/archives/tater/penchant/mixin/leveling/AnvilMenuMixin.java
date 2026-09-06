@@ -73,7 +73,7 @@ public abstract class AnvilMenuMixin {
     )
     private ItemEnchantments setProgress(ItemEnchantments.Mutable instance, Operation<ItemEnchantments> original, @Share("progress") LocalRef<EnchantmentProgress.@Nullable Mutable> progressRef, @Local(ordinal = 1) ItemStack result) {
         var progress = progressRef.get();
-        if (progress != null) {
+        if (progress != null && !progress.isEmpty()) {
             result.set(PenchantComponents.ENCHANTMENT_PROGRESS, progress.toImmutable());
             EnchantmentProgress.updateEnchantments(progress, instance, result);
         }

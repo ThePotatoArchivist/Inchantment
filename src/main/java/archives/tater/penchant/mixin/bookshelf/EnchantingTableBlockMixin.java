@@ -15,6 +15,7 @@ import org.objectweb.asm.Opcodes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,9 +31,9 @@ public class EnchantingTableBlockMixin {
             method = "isValidBookShelf",
             at = @At("MIXINEXTRAS:EXPRESSION")
     )
-    private static boolean checkChiseled(BlockState instance, TagKey<Block> tagKey, Operation<Boolean> original) {
+    private static boolean checkChiseled(BlockState instance, TagKey<Block> tagKey, Operation<Boolean> original, Level level, BlockPos pos, BlockPos offset) {
         if (!original.call(instance, tagKey)) return false;
-        return PenchantmentHelper.getBookCount(instance) > 0;
+        return PenchantmentHelper.getBookCount(level, pos.offset(offset)) > 0;
     }
 
     @ModifyExpressionValue(

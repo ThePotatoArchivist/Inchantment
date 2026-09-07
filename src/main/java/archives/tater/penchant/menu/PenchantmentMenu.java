@@ -18,7 +18,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -176,9 +175,7 @@ public class PenchantmentMenu extends AbstractContainerMenu {
         return PenchantmentHelper.getBookshelfOffsets().stream()
                 .filter(offset -> EnchantingTableBlock.isValidBookShelf(level, pos, offset))
                 .map(pos::offset)
-                .map(level::getBlockState)
-                .filter(state -> state.is(BlockTags.ENCHANTMENT_POWER_PROVIDER))
-                .mapToInt(PenchantmentHelper::getBookCount)
+                .mapToInt(offsetPos -> PenchantmentHelper.getBookCount(level, offsetPos))
                 .sum();
     }
 

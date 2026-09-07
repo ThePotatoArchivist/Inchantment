@@ -43,6 +43,7 @@ import java.util.stream.Stream;
 
 import static archives.tater.penchant.util.PenchantUtil.streamOrdered;
 import static java.util.Comparator.comparingInt;
+import static net.minecraft.util.Mth.floor;
 
 public class PenchantmentMenu extends AbstractContainerMenu {
     private final Container enchantSlots = new SimpleContainer(2) {
@@ -172,11 +173,11 @@ public class PenchantmentMenu extends AbstractContainerMenu {
     }
 
     public static int getBookCount(Level level, BlockPos pos) {
-        return PenchantmentHelper.getBookshelfOffsets().stream()
+        return floor(PenchantmentHelper.getBookshelfOffsets().stream()
                 .filter(offset -> EnchantingTableBlock.isValidBookShelf(level, pos, offset))
                 .map(pos::offset)
-                .mapToInt(offsetPos -> PenchantmentHelper.getBookCount(level, offsetPos))
-                .sum();
+                .mapToDouble(offsetPos -> PenchantmentHelper.getBookCount(level, offsetPos))
+                .sum());
     }
 
     public static boolean hasDisenchanter(Level level, BlockPos pos) {

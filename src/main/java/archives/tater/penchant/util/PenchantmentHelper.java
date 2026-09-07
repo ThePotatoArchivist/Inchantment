@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static java.lang.Math.abs;
-import static net.minecraft.util.Mth.floor;
 
 public class PenchantmentHelper {
     public static final boolean ITEM_DESCRIPTIONS_INSTALLED = FabricLoader.getInstance().isModLoaded("item_descriptions");
@@ -117,12 +116,12 @@ public class PenchantmentHelper {
         return getBookshelfOffsets(EnchantingTableBlock.BOOKSHELF_OFFSETS);
     }
 
-    public static int getBookCount(BlockGetter level, BlockPos pos) {
+    public static float getBookCount(BlockGetter level, BlockPos pos) {
         var state = level.getBlockState(pos);
         if (state.hasProperty(ChiseledBookShelfBlock.SLOT_0_OCCUPIED))
             return (int) ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.stream().filter(state::getValue).count();
         if (state.hasProperty(LecternBlock.HAS_BOOK))
             return state.getValue(LecternBlock.HAS_BOOK) ? 1 : 0;
-        return floor(3 * state.getProvidedEnchantmentPower(level, pos));
+        return 3 * state.getProvidedEnchantmentPower(level, pos);
     }
 }

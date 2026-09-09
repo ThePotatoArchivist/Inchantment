@@ -22,6 +22,13 @@ public class EnchantmentTagGenerator extends FabricTagsProvider<Enchantment> {
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         builder(PenchantEnchantmentTags.DISABLED);
+        builder(PenchantEnchantmentTags.NO_LEVELING);
+        builder(PenchantEnchantmentTags.IGNORE_GUARANTEED_DROP);
+
+        builder(PenchantEnchantmentTags.COMMON);
+        builder(PenchantEnchantmentTags.UNCOMMON);
+        builder(PenchantEnchantmentTags.RARE);
+        builder(PenchantEnchantmentTags.UNIQUE);
 
         builder(PenchantEnchantmentTags.ON_RANDOM_LOOT_BOOKS)
                 .forceAddTag(EnchantmentTags.ON_RANDOM_LOOT);

@@ -6,6 +6,7 @@ import archives.tater.penchant.client.PenchantClientConfig;
 import archives.tater.penchant.client.gui.screen.PenchantmentScreen;
 import archives.tater.penchant.component.EnchantmentProgress;
 import archives.tater.penchant.registry.PenchantComponents;
+import archives.tater.penchant.registry.PenchantEnchantmentTags;
 import archives.tater.penchant.registry.PenchantItemTags;
 import archives.tater.penchant.registry.PenchantMenus;
 
@@ -13,7 +14,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.item.v1.FabricTooltipFlag;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -107,7 +107,7 @@ public class PenchantClient implements ClientModInitializer {
 
         ItemTooltipCallback.EVENT.addPhaseOrdering(Identifier.fromNamespaceAndPath("enchiridion", "enchantment_tooltip_modifications"), TOOLTIP_EVENT_PHASE);
         ItemTooltipCallback.EVENT.register(TOOLTIP_EVENT_PHASE, (stack, tooltipContext, tooltipFlag, lines) -> {
-            if (stack.has(DataComponents.STORED_ENCHANTMENTS) || stack.is(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS) || !shouldShowProgress() && !((FabricTooltipFlag) tooltipFlag).shouldDisplayAllInformation()) return;
+            if (stack.has(DataComponents.STORED_ENCHANTMENTS) || stack.is(PenchantItemTags.MAX_LEVEL_ENCHANTMENTS) || !shouldShowProgress() && !tooltipFlag.shouldDisplayAllInformation()) return;
 
             var enchantments = stack.getEnchantments();
             if (enchantments.isEmpty()) return;
@@ -118,10 +118,10 @@ public class PenchantClient implements ClientModInitializer {
 
                 for (var entry : enchantments.entrySet()) {
                     var enchantment = entry.getKey();
-                    if (containsIgnoreStyle(line, enchantment.value().description())) {
-                        iter.add(getProgressTooltip(progress, enchantment, entry.getIntValue(), stack));
-                        break;
-                    }
+                    if (enchantment.is(PenchantEnchantmentTags.NO_LEVELING) || enchantment.value().getMaxLevel() <= 1) continue;
+                    if (!containsIgnoreStyle(line, enchantment.value().description())) continue;
+                    iter.add(getProgressTooltip(progress, enchantment, entry.getIntValue(), stack));
+                    break;
                 }
             }
         });

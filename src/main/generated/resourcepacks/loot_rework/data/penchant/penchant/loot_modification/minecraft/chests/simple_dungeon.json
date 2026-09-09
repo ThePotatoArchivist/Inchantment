@@ -8,30 +8,26 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantments": {
-                "minecraft:silk_touch": 1.0
-              },
-              "function": "minecraft:set_enchantments"
+          "modifier": {
+            "type": "minecraft:set_enchantments",
+            "enchantments": {
+              "minecraft:silk_touch": 1
             }
-          ],
+          },
           "name": "minecraft:book"
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantments": {
-                "minecraft:fortune": 1.0
-              },
-              "function": "minecraft:set_enchantments"
+          "modifier": {
+            "type": "minecraft:set_enchantments",
+            "enchantments": {
+              "minecraft:fortune": 1
             }
-          ],
+          },
           "name": "minecraft:book"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "targets": [

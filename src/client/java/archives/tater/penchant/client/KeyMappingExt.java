@@ -3,7 +3,6 @@ package archives.tater.penchant.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Type;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 
 public class KeyMappingExt extends KeyMapping {
     public KeyMappingExt(String name, Type type, int key, Category category) {
@@ -11,6 +10,6 @@ public class KeyMappingExt extends KeyMapping {
     }
 
     public boolean isDownAnywhere() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), key.getValue());
+        return InputConstants.isKeyDown(key.getValue());
     }
 }

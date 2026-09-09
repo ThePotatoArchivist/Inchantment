@@ -15,7 +15,6 @@ import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.item.trading.VillagerTrades;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,9 +25,9 @@ public class VillagerTradeGenerator extends FabricDynamicRegistryProvider {
     }
 
     private static VillagerTrade randomEnnchantedBook(HolderLookup.Provider registries, int emeraldCost, int maxUses, int xp) {
-        return new VillagerTrade(
+        return VillagerTrade.builder(
                 new TradeCost(Items.EMERALD, emeraldCost),
-                Optional.of(new TradeCost(Items.BOOK, 1)),
+                new TradeCost(Items.BOOK, 1),
                 new ItemStackTemplate(Items.ENCHANTED_BOOK, DataComponentPatch.builder()
                         .set(PenchantComponents.RANDOM_ENCHANTMENT, new RandomEnchantment(
                                 Optional.of(registries.getOrThrow(EnchantmentTags.TRADEABLE)),
@@ -37,10 +36,8 @@ public class VillagerTradeGenerator extends FabricDynamicRegistryProvider {
                         .build()),
                 maxUses,
                 xp,
-                0.2f,
-                Optional.empty(),
-                List.of()
-        );
+                0.2f
+        ).build();
     }
 
     @Override

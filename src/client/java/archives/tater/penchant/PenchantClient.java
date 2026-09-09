@@ -37,7 +37,7 @@ import static net.minecraft.util.Util.makeDescriptionId;
 
 public class PenchantClient implements ClientModInitializer {
     private static KeyMappingExt keybind(Identifier id, int key, KeyMapping.Category category) {
-        return (KeyMappingExt) KeyMappingHelper.registerKeyMapping(new KeyMappingExt(makeDescriptionId("key", id), Type.KEYSYM, key, category));
+        return (KeyMappingExt) KeyMappingHelper.registerKeyMapping(new KeyMappingExt(makeDescriptionId("key", id), Type.KEYBOARD, key, category));
     }
 
     private static final KeyMapping.Category PENCHANT_CATEGORY = KeyMapping.Category.register(Penchant.id(Penchant.MOD_ID));

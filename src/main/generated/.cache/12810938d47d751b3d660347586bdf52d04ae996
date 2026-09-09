@@ -1,4 +1,4 @@
-// 26.2	-999999999-01-01T00:00:00	Penchant/Tags for minecraft:enchantment
+// 26.3-pre-3	-999999999-01-01T00:00:00	Penchant/Tags for minecraft:enchantment
 83f5dabdcff38e45fe78032312f913f4a58edd68 data/c/tags/enchantment/hidden_from_recipe_viewers.json
 03fa1d5842da6a575fcd4a7f64a6c7dbeb6972d5 data/minecraft/tags/enchantment/in_enchanting_table.json
 03fa1d5842da6a575fcd4a7f64a6c7dbeb6972d5 data/minecraft/tags/enchantment/on_mob_spawn_equipment.json

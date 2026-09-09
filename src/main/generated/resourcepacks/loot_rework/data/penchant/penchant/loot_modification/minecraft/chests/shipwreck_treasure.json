@@ -8,30 +8,26 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantments": {
-                "minecraft:respiration": 1.0
-              },
-              "function": "minecraft:set_enchantments"
+          "modifier": {
+            "type": "minecraft:set_enchantments",
+            "enchantments": {
+              "minecraft:respiration": 1
             }
-          ],
+          },
           "name": "minecraft:book"
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantments": {
-                "minecraft:depth_strider": 1.0
-              },
-              "function": "minecraft:set_enchantments"
+          "modifier": {
+            "type": "minecraft:set_enchantments",
+            "enchantments": {
+              "minecraft:depth_strider": 1
             }
-          ],
+          },
           "name": "minecraft:book"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "targets": [

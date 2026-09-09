@@ -61,7 +61,7 @@ dependencies {
 
 	implementation include("folk.sisby:kaleido-config:${project.kaleido_version}")
 
-    compileOnly localRuntime("cc.cassian.item-descriptions:item-descriptions-fabric:${project.item_descriptions_version}") {
+    compileOnly("cc.cassian.item-descriptions:item-descriptions-fabric:${project.item_descriptions_version}") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 }

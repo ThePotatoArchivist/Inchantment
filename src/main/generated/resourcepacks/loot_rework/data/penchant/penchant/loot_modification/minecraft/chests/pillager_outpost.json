@@ -8,18 +8,16 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantments": {
-                "minecraft:multishot": 1.0
-              },
-              "function": "minecraft:set_enchantments"
+          "modifier": {
+            "type": "minecraft:set_enchantments",
+            "enchantments": {
+              "minecraft:multishot": 1
             }
-          ],
+          },
           "name": "minecraft:book"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "targets": [

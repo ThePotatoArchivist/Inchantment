@@ -7,9 +7,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 public record RandomEnchantment(Optional<HolderSet<Enchantment>> options, boolean onlyCompatible) implements TooltipProvider {
 
     public static final MapCodec<RandomEnchantment> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("options").forGetter(RandomEnchantment::options),
+            RegistryCodecs.holderSet(Registries.ENCHANTMENT).optionalFieldOf("options").forGetter(RandomEnchantment::options),
             Codec.BOOL.optionalFieldOf("only_compatible", true).forGetter(RandomEnchantment::onlyCompatible)
     ).apply(instance, RandomEnchantment::new));
 

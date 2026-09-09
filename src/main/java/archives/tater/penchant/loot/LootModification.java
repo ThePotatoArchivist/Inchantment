@@ -25,13 +25,13 @@ import java.util.Optional;
 public record LootModification(
         List<ResourceKey<LootTable>> targets,
         List<LootPool> pools,
-        List<LootItemFunction> functions,
+        List<Holder<LootItemFunction>> functions,
         Optional<LootPoolPatch> modifyPools
 ) {
     public static final Codec<LootModification> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(Registries.LOOT_TABLE).listOf(1, Integer.MAX_VALUE).fieldOf("targets").forGetter(LootModification::targets),
             LootPool.CODEC.listOf().optionalFieldOf("pools", List.of()).forGetter(LootModification::pools),
-            LootItemFunctions.TYPED_CODEC.listOf().optionalFieldOf("functions", List.of()).forGetter(LootModification::functions),
+            LootItemFunctions.CODEC.listOf().optionalFieldOf("functions", List.of()).forGetter(LootModification::functions),
             LootPoolPatch.CODEC.optionalFieldOf("modify_pools").forGetter(LootModification::modifyPools)
     ).apply(instance, LootModification::new));
 
@@ -54,25 +54,25 @@ public record LootModification(
 
     public void apply(LootTable.Builder builder) {
         builder.pools(pools);
-        builder.apply(functions);
+        builder.apply(functions, holder -> holder::value);
         modifyPools.ifPresent(patch -> builder.modifyPools(patch::apply));
     }
 
     public record LootPoolPatch(
             List<LootPoolEntryContainer> entries,
-            List<LootItemCondition> conditions,
-            List<LootItemFunction> functions
+            List<Holder<LootItemCondition>> conditions,
+            List<Holder<LootItemFunction>> functions
     ) {
         public static final Codec<LootPoolPatch> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 LootPoolEntries.CODEC.listOf().fieldOf("entries").forGetter(LootPoolPatch::entries),
-                LootItemCondition.DIRECT_CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(LootPoolPatch::conditions),
-                LootItemFunctions.ROOT_CODEC.listOf().optionalFieldOf("functions", List.of()).forGetter(LootPoolPatch::functions)
+                LootItemCondition.CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(LootPoolPatch::conditions),
+                LootItemFunctions.CODEC.listOf().optionalFieldOf("functions", List.of()).forGetter(LootPoolPatch::functions)
         ).apply(instance, LootPoolPatch::new));
 
         public void apply(LootPool.Builder builder) {
             builder.add(entries);
-            builder.when(conditions);
-            builder.apply(functions);
+            builder.when(conditions, holder -> holder::value);
+            builder.apply(functions, holder -> holder::value);
         }
     }
 }

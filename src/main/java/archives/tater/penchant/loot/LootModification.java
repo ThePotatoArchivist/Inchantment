@@ -1,14 +1,12 @@
 package archives.tater.penchant.loot;
 
-import archives.tater.penchant.Penchant;
+import archives.tater.penchant.registry.PenchantRegistries;
 
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -35,13 +33,9 @@ public record LootModification(
             LootPoolPatch.CODEC.optionalFieldOf("modify_pools").forGetter(LootModification::modifyPools)
     ).apply(instance, LootModification::new));
 
-    public static final ResourceKey<Registry<LootModification>> KEY = ResourceKey.createRegistryKey(Penchant.id("loot_modification"));
-
     public static void init() {
-        DynamicRegistries.register(KEY, CODEC);
-
         LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
-            registries.lookupOrThrow(LootModification.KEY)
+            registries.lookupOrThrow(PenchantRegistries.LOOT_MODIFICATION)
                     .filterElements(modification -> modification.matches(key))
                     .listElements().map(Holder::value)
                     .forEach(modification -> modification.apply(tableBuilder));
